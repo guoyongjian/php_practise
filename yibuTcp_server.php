@@ -6,7 +6,7 @@
  * Time: 上午12:58
  */
 
-$serv = new swoole_server('0.0.0.0',9501);
+$serv = new swoole_server('127.0.0.1',9501);
 
 //设置异步  进程工作数
 $serv->set(array('task_worker_num'=>4));
