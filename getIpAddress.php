@@ -28,5 +28,12 @@
 echo '淘宝' . PHP_EOL;
 $res1 = file_get_contents("http://ip.taobao.com/service/getIpInfo.php?ip=$ip");
 $res1 = json_decode($res1,true);
-print_r($res1);
-echo "<br/>";
+if(!empty($res1['code']){
+    exit('get data error');
+}
+
+echo '您的ip： ' . $res1['ip'] . PHP_EOL;
+echo '您的国家： ' . $res1['country'] . PHP_EOL;
+echo '您的省份： ' . $res1['region'] . PHP_EOL;
+echo '您的城市： ' . $res1['city'] . PHP_EOL;
+echo '您的运营商： ' . $res1['isp'] . PHP_EOL;
