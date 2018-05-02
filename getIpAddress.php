@@ -37,3 +37,31 @@ echo '您的国家： ' . $res1['data']['country'] . PHP_EOL;
 echo '您的省份： ' . $res1['data']['region'] . PHP_EOL;
 echo '您的城市： ' . $res1['data']['city'] . PHP_EOL;
 echo '您的运营商： ' . $res1['data']['isp'] . PHP_EOL;
+
+
+echo '浏览器类型：' . getBrowser() . PHP_EOL;
+echo '网站来源' . getFromPage();
+
+ //获取用户浏览器类型
+ function getBrowser(){
+  $agent=$_SERVER["HTTP_USER_AGENT"];
+  if(strpos($agent,'MSIE')!==false || strpos($agent,'rv:11.0')) //ie11判断
+   return "ie";
+  else if(strpos($agent,'Firefox')!==false)
+   return "firefox";
+  else if(strpos($agent,'Chrome')!==false)
+   return "chrome";
+  else if(strpos($agent,'Opera')!==false)
+   return 'opera';
+  else if((strpos($agent,'Chrome')==false)&&strpos($agent,'Safari')!==false)
+   return 'safari';
+  else
+   return 'unknown';
+ }
+ 
+ //获取网站来源
+ function getFromPage(){
+  return $_SERVER['HTTP_REFERER'];
+ }
+ 
+}
