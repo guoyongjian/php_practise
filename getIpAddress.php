@@ -40,7 +40,7 @@ echo '您的运营商： ' . $res1['data']['isp'] . PHP_EOL;
 
 
 echo '浏览器类型：' . getBrowser() . PHP_EOL;
-echo '网站来源' . getFromPage();
+echo '网站来源: ' . getFromPage();
 
  //获取用户浏览器类型
  function getBrowser(){
@@ -58,10 +58,11 @@ echo '网站来源' . getFromPage();
   else
    return 'unknown';
  }
- 
+ //print_r($_SERVER);
+
  //获取网站来源
  function getFromPage(){
-  return $_SERVER['HTTP_REFERER'];
+  return !empty($_SERVER['HTTP_REFERER'])? $_SERVER['HTTP_REFERER'] : 'none';
  }
  
-}
+
