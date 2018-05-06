@@ -1,0 +1,11 @@
+{
+    "require": {
+	"guzzlehttp/guzzle": "^6.2"
+    },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
+    }
+  }
+}
