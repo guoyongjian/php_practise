@@ -28,9 +28,37 @@ class WeChat{
         if(empty($result)){
             return false;
         }
-        file_put_contents($token_file,$result);
-        return $result;
+        $result = json_decode($result,1);
+        file_put_contents($token_file,$result['access_token']);
+        return $result['access_token'];
     }
+    
+    //获取ticket
+    public function getTicket($content=1){
+        $url = 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=' . $this->getAccessToken();
+        $arr = [
+            'scene'=>json_encode(['scene_str'=>$content])
+        ];
+        $params = [
+            'action_name'=>'QR_LIMIT_SCENE',
+            'action_info'=>json_encode($arr)
+        ];
+        $res = $this->requestPost($url,json_encode($params));
+        return $res['ticket'];
+    }
+    
+    //getQRcode
+    public function getQrcode($content){
+        $ticket = $this->getTicket($content);
+        $url = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' . urlencode($ticket);
+        if(empty($url)){
+            return false;
+        }
+//        header('Content-Type','image/jpg');
+        header('Content-Type: image/png');
+        echo $this->requestGet($url);
+    }
+    
     
     //发送GET请求
     private function requestGet($url,$ssl = true){
@@ -39,8 +67,21 @@ class WeChat{
         if ($response->getStatusCode() != 200) {
             return false;
         }
-        $response = json_decode($response->getBody(), 1);
-        return $response['access_token'];
+        $response = $response->getBody();
+        return $response;
+    }
+    
+    //发送post请求
+    private function requestPost($url,$arr=''){
+        $client = new Client(['base_uri' => $url]);
+        $r = $client->request('POST', $url, [
+            'body' => $arr
+        ]);
+        if ($r->getStatusCode() != 200) {
+            return false;
+        }
+        $response = json_decode($r->getBody(), 1);
+        return $response;
     }
     
 }
