@@ -10,11 +10,13 @@ require '../vendor/autoload.php';
 class WeChat{
     private $appid;
     private $appSecret;
+    private $token;
     
-    public function __construct($appid,$appsecret)
+    public function __construct($appid,$appsecret,$token)
     {
         $this->appid = $appid;
         $this->appSecret = $appsecret;
+        $this->token = $token;
     }
     
     //获取access_token
@@ -54,9 +56,35 @@ class WeChat{
         if(empty($url)){
             return false;
         }
-//        header('Content-Type','image/jpg');
         header('Content-Type: image/png');
         echo $this->requestGet($url);
+    }
+    
+    //检验url的合法性
+    public function firstValid(){
+        //验证签名
+        if($this->checkSignature()){
+            echo $_GET['echostr'];
+        }else{
+            return false;
+        }
+    }
+    
+    //验证签名
+    public function checkSignature(){
+        $signature = $_GET['signature'];
+        $timestamp = $_GET['timestamp'];
+        $nonce = $_GET['nonce'];
+        
+        //将时间戳，随机字符串，token按照字母顺序排序并连接
+        $arr = [$this->token,$timestamp,$nonce];
+        sort($arr,SORT_STRING);//字典顺序
+        $str = implode($arr);//连接
+        $str = sha1($str);//加密
+        if($signature == $str){
+            return true;
+        }
+        return false;
     }
     
     
