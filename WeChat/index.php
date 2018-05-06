@@ -38,7 +38,10 @@ class WeChat{
         $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36';
         curl_setopt($curl,CURLOPT_USERAGENT,$user_agent);
         curl_setopt($curl,CURLOPT_AUTOREFERER,true);
-        curl_setopt($curl,CURLOPT_SSL_VERIFYPEER,false);
+        if($ssl){
+            curl_setopt($curl,CURLOPT_SSL_VERIFYPEER,false);
+            curl_setopt($curl,CURLOPT_SSL_VERIFYHOST,1);
+        }
         curl_setopt($curl,CURLOPT_HEADER,false);
         curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
         $response = curl_exec($curl);
