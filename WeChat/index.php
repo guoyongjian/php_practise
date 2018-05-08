@@ -19,6 +19,35 @@ class WeChat{
         $this->token = $token;
     }
     
+    public function responseMSG() {
+        $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+        if(empty($GLOBALS['HTTP_RAW_POST_DATA'])){
+            die('');
+        }
+        //禁止xml实体解析，防止xml注入
+        libxml_disable_entity_loader(true);
+        //从字符串获取xml对象
+        $request_xml = simplexml_load_string($xml,'SimpleXMLElement',LIBXML_NOCDATA);
+        switch ($request_xml->MsgType){
+            case 'event':
+                $event = $request_xml->MsgType;
+                if('subscribe' == $event){
+                    $this->_doSubscribe($request_xml);
+                }
+                break;
+            case "":
+        }
+    }
+    
+    private function _doSubscribe($request_xml){
+        //利用消息发送，完成向关注用户打招呼的功能
+        $text = '<xml><ToUserName>< ![CDATA[%s] ]></ToUserName><FromUserName>< ![CDATA[%s] ]></FromUserName>  <CreateTime>%s</CreateTime><MsgType>< ![CDATA[%s] ]></MsgType><Content>< ![CDATA[%s] ]></Content>  <MsgId>%s</MsgId></xml>';
+        
+        $content = 'thanks for your subscribe';
+        $response = sprintf($text,$request_xml->FromUserName,$request_xml->ToUserName,time(),$content,1234567890);
+        
+    }
+    
     //获取access_token
     public function getAccessToken($token_file = './access_token'){
         if(file_exists($token_file) && filemtime($token_file) > (time() - 7200)){
