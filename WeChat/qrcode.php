@@ -18,7 +18,6 @@ $weChat = new WeChat(APPID,SECRET,TOKEN);
 //
 //var_dump($weChat->getTicket());
 //
-//var_dump($weChat->getQrcode(TOKEN));
-var_dump($weChat->responseMSG());
+var_dump($weChat->getQrcode(TOKEN));
 //$weChat->firstValid();
 //$weChat->responseMSG();
