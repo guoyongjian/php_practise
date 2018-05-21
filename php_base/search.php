@@ -5,27 +5,30 @@
 
 $dir = './ceshi';
 
-
+$arr = [];
 cc($dir);
 
-$arr = [];
+
 
 function cc($dir){
+    global $arr;
    $file = @opendir($dir);
    if($file){
        while(($s = readdir($file)) !== false){
            if(($s !== '.') && ($s !== '..')){
                if(is_dir($dir . '/' . $s)){
-                   echo $dir .'/' . $s . PHP_EOL;
+                   $arr['path'][] = $dir .'/' . $s . PHP_EOL;
                    cc($dir . '/' . $s);
                }else{
-                   echo $s . PHP_EOL;
+                   $arr['files'][] = $s . PHP_EOL;
                }
            }
        }
    }
 }
 
+
+print_r($arr);
 
 
 
